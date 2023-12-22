@@ -35,7 +35,8 @@ packages = ["python_utils"]
 version = {attr = "python_utils.version.__version__"}
 
 [project.scripts]
-clear_hidden = "python_utils.clear_hidden:cli"
+clear-hidden = "python_utils.clear_hidden:cli"
+python-archive = "python_utils.archives:cli"
 
 [tool.black]
 line-length = 79

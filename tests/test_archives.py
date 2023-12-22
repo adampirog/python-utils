@@ -1,12 +1,23 @@
+from argparse import Namespace
 from pathlib import Path
 
+from pytest import fixture
+
 from python_utils.archives import create_archive, extract_archive
+from python_utils.archives import main as script_main
 
 
-def test_archive_creation(tmpdir):
+@fixture(scope="function")
+def test_dir(tmpdir) -> tuple[Path, Path]:
     root_dir = Path(tmpdir.mkdir("test"))
     folder = root_dir / "folder"
     folder.mkdir(exist_ok=True, parents=True)
+
+    return root_dir, folder
+
+
+def test_archive_creation(test_dir):
+    root_dir, folder = test_dir
 
     for i in range(10):
         file = folder / f"file_{i}.txt"
@@ -17,10 +28,8 @@ def test_archive_creation(tmpdir):
     assert target.is_file()
 
 
-def test_archive_creation_defaukt_target(tmpdir):
-    root_dir = Path(tmpdir.mkdir("test"))
-    folder = root_dir / "folder"
-    folder.mkdir(exist_ok=True, parents=True)
+def test_archive_creation_default_target(test_dir):
+    root_dir, folder = test_dir
 
     for i in range(10):
         file = folder / f"file_{i}.txt"
@@ -31,10 +40,8 @@ def test_archive_creation_defaukt_target(tmpdir):
     assert target.is_file()
 
 
-def test_archive_extraction(tmpdir):
-    root_dir = Path(tmpdir.mkdir("test"))
-    folder = root_dir / "folder"
-    folder.mkdir(exist_ok=True, parents=True)
+def test_archive_extraction(test_dir):
+    root_dir, folder = test_dir
 
     for i in range(10):
         file = folder / f"file_{i}.txt"
@@ -53,10 +60,8 @@ def test_archive_extraction(tmpdir):
         assert file.name == f"file_{index}.txt"
 
 
-def test_archive_extraction_default_target(tmpdir):
-    root_dir = Path(tmpdir.mkdir("test"))
-    folder = root_dir / "folder"
-    folder.mkdir(exist_ok=True, parents=True)
+def test_archive_extraction_default_target(test_dir):
+    root_dir, folder = test_dir
 
     for i in range(10):
         file = folder / f"file_{i}.txt"
@@ -69,6 +74,41 @@ def test_archive_extraction_default_target(tmpdir):
     restore = root_dir / "target"
 
     extract_archive(target)
+    assert restore.is_dir()
+
+    for index, file in enumerate(sorted(restore.glob("*"))):
+        assert file.name == f"file_{index}.txt"
+
+
+def test_script_creation(test_dir):
+    root_dir, folder = test_dir
+
+    for i in range(10):
+        file = folder / f"file_{i}.txt"
+        file.touch()
+
+    target = root_dir / "target.tgz"
+    args = Namespace(source=str(folder), destination=str(target))
+    script_main(args)
+    assert target.is_file()
+
+
+def test_script_extraction(test_dir):
+    root_dir, folder = test_dir
+
+    for i in range(10):
+        file = folder / f"file_{i}.txt"
+        file.touch()
+
+    target = root_dir / "target.tgz"
+    args = Namespace(source=str(folder), destination=str(target))
+    script_main(args)
+    assert target.is_file()
+
+    restore = root_dir / "restore"
+
+    args = Namespace(source=str(target), destination=str(restore))
+    script_main(args)
     assert restore.is_dir()
 
     for index, file in enumerate(sorted(restore.glob("*"))):
