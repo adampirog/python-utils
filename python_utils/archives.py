@@ -73,6 +73,8 @@ def parse_args() -> Namespace:
     parser.add_argument(
         "destination",
         type=str,
+        default=None,
+        nargs="?",
         help="(Optional) Provide a destination for packing/unpacking an archive.",
     )
 
