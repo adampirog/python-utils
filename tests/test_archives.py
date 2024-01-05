@@ -1,7 +1,7 @@
 from argparse import Namespace
 from pathlib import Path
 
-from pytest import fixture
+from pytest import fixture, raises
 
 from python_utils.archives import create_archive, extract_archive
 from python_utils.archives import main as script_main
@@ -78,6 +78,22 @@ def test_archive_extraction_default_target(test_dir):
 
     for index, file in enumerate(sorted(restore.glob("*"))):
         assert file.name == f"file_{index}.txt"
+
+
+def test_script_nofile_error(test_dir):
+    args = Namespace(source="dummy")
+    with raises(FileNotFoundError):
+        script_main(args)
+
+
+def test_script_wrongfile_error(test_dir):
+    root_dir, _ = test_dir
+    file = root_dir / "dummy.tgz"
+    file.touch()
+
+    args = Namespace(source=str(file))
+    with raises(ValueError, match="File is not a valid archive."):
+        script_main(args)
 
 
 def test_script_creation(test_dir):

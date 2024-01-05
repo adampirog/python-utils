@@ -84,10 +84,15 @@ def parse_args() -> Namespace:
 def main(args: Namespace):
     source = Path(args.source)
 
-    if source.suffix in [".tgz", ".tar.gz"]:
-        extract_archive(source, args.destination)
-    else:
+    if source.is_file():
+        if tarfile.is_tarfile(source):
+            extract_archive(source, args.destination)
+        else:
+            raise ValueError("File is not a valid archive.")
+    elif source.is_dir():
         create_archive(source, args.destination)
+    else:
+        raise FileNotFoundError(f"Path {source} is not valid.")
 
 
 def cli():

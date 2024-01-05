@@ -25,11 +25,8 @@ dev = [
 requires = ["setuptools>=60.0.0"]
 build-backend = "setuptools.build_meta"
 
-[tool.distutils.bdist_wheel]
-universal = true
-
-[tool.setuptools]
-packages = ["python_utils"]
+[tool.setuptools.packages.find]
+include = ["python_utils*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "python_utils.version.__version__"}
