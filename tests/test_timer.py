@@ -24,3 +24,8 @@ def test_formatter(time_value):
     delta = format_delta(time_value, digits=2)
 
     assert delta == "0:00:03.21"
+
+def test_no_microseconds():
+    delta = format_delta(3.0, digits=2)
+
+    assert delta == "0:00:03"

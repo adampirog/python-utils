@@ -9,13 +9,14 @@ def format_delta(seconds: float, digits: int = -1) -> str:
     """
     delta = str(timedelta(seconds=seconds))
 
-    if digits == 0:
-        delta = delta.split(".", 1)[0]
-    elif digits > 0:
-        # format microseconds
-        delta = delta.split(".")
-        delta[1] = delta[1][:digits]
-        delta = ".".join(delta)
+    if "." in delta:
+        if digits == 0:
+            delta = delta.split(".", 1)[0]
+        elif digits > 0:
+            # format microseconds
+            delta = delta.split(".")
+            delta[1] = delta[1][:digits]
+            delta = ".".join(delta)
 
     return delta
 
