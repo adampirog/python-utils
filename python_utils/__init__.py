@@ -1,7 +1,7 @@
-from .imports import import_module
-from .iterables import batched
-from .timer import timer
-from .version import __version__
+from python_utils.imports import import_module
+from python_utils.iterables import batched
+from python_utils.timer import timer
+from python_utils.version import __version__
 
 
 __all__ = [
