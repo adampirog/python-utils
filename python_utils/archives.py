@@ -3,6 +3,7 @@ Simple and convenient utilities for managing file archives.
 
 Script allows to create or extract given archive.
 """
+
 import subprocess
 import tarfile
 from argparse import ArgumentParser, Namespace, RawDescriptionHelpFormatter
@@ -75,7 +76,8 @@ def parse_args() -> Namespace:
         type=str,
         default=None,
         nargs="?",
-        help="(Optional) Provide a destination for packing/unpacking an archive.",
+        help="(Optional) Provide a destination for packing/unpacking "
+        "an archive.",
     )
 
     return parser.parse_args()
