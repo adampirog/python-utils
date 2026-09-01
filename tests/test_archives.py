@@ -9,12 +9,11 @@ from python_utils.archives import main as script_main
 
 
 @fixture(scope="function")
-def test_dir(tmpdir) -> tuple[Path, Path]:
-    root_dir = Path(tmpdir.mkdir("test"))
-    folder = root_dir / "folder"
+def test_dir(tmp_path) -> tuple[Path, Path]:
+    folder = tmp_path / "folder"
     folder.mkdir(exist_ok=True, parents=True)
 
-    return root_dir, folder
+    return tmp_path, folder
 
 
 def test_archive_creation(test_dir):
