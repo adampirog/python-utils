@@ -6,21 +6,20 @@ from python_utils.clear_hidden import clear_hidden
 
 
 @pytest.fixture(scope="function")
-def directory(tmpdir_factory) -> Path:
-    root = Path(tmpdir_factory.mktemp("data"))
+def directory(tmp_path) -> Path:
 
-    (root / ".ipynb_checkpoints").mkdir()
-    (root / "__pycache__").mkdir()
-    (root / "dummy").mkdir()
+    (tmp_path / ".ipynb_checkpoints").mkdir()
+    (tmp_path / "__pycache__").mkdir()
+    (tmp_path / "dummy").mkdir()
 
-    subdir = root / "subdir"
+    subdir = tmp_path / "subdir"
     subdir.mkdir()
 
     (subdir / ".ipynb_checkpoints").mkdir()
     (subdir / "__pycache__").mkdir()
     (subdir / "dummy").mkdir()
 
-    return root
+    return tmp_path
 
 
 def test_clear_flat(directory):

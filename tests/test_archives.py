@@ -1,3 +1,4 @@
+import shutil
 from argparse import Namespace
 from pathlib import Path
 
@@ -8,12 +9,11 @@ from python_utils.archives import main as script_main
 
 
 @fixture(scope="function")
-def test_dir(tmpdir) -> tuple[Path, Path]:
-    root_dir = Path(tmpdir.mkdir("test"))
-    folder = root_dir / "folder"
+def test_dir(tmp_path) -> tuple[Path, Path]:
+    folder = tmp_path / "folder"
     folder.mkdir(exist_ok=True, parents=True)
 
-    return root_dir, folder
+    return tmp_path, folder
 
 
 def test_archive_creation(test_dir):
@@ -29,7 +29,7 @@ def test_archive_creation(test_dir):
 
 
 def test_archive_creation_default_target(test_dir):
-    root_dir, folder = test_dir
+    _, folder = test_dir
 
     for i in range(10):
         file = folder / f"file_{i}.txt"
@@ -91,8 +91,8 @@ def test_script_wrongfile_error(test_dir):
     file = root_dir / "dummy.tgz"
     file.touch()
 
-    args = Namespace(source=str(file))
-    with raises(ValueError, match="File is not a valid archive."):
+    args = Namespace(source=str(file), destination=None)
+    with raises(shutil.ReadError, match=r"is not a .*?tar file"):
         script_main(args)
 
 
