@@ -3,14 +3,13 @@ Delete all .ipynb_checkpoints and __pycache__ folders from given directory.
 
 Use 'recursive' to recursively follow subsequent directories.
 """
+
 from argparse import ArgumentParser, Namespace, RawDescriptionHelpFormatter
 from pathlib import Path
 from shutil import rmtree
 
 
-def clear_jupyter(
-    directory: str, recursive: bool = False, verbose: bool = False
-) -> None:
+def clear_jupyter(directory: str, recursive: bool = False, verbose: bool = False) -> None:
     """
     Delete all .ipynb_checkpoints folders from given directory.
 
@@ -29,9 +28,7 @@ def clear_jupyter(
         rmtree(file)
 
 
-def clear_pycache(
-    directory: str, recursive: bool = False, verbose: bool = False
-) -> None:
+def clear_pycache(directory: str, recursive: bool = False, verbose: bool = False) -> None:
     """
     Delete all __pycache__ folders from given directory.
 
@@ -50,9 +47,7 @@ def clear_pycache(
         rmtree(file)
 
 
-def clear_hidden(
-    directory: str, recursive: bool = False, verbose: bool = False
-) -> None:
+def clear_hidden(directory: str, recursive: bool = False, verbose: bool = False) -> None:
     clear_jupyter(directory, recursive=recursive, verbose=verbose)
     clear_pycache(directory, recursive=recursive, verbose=verbose)
 
@@ -64,18 +59,14 @@ def parse_args() -> Namespace:
     )
 
     parser.add_argument("directory")
-    parser.add_argument(
-        "-r", "--recursive", default=False, action="store_true"
-    )
+    parser.add_argument("-r", "--recursive", default=False, action="store_true")
     parser.add_argument("-v", "--verbose", default=False, action="store_true")
 
     return parser.parse_args()
 
 
 def main(args: Namespace):
-    clear_hidden(
-        args.directory, recursive=args.recursive, verbose=args.verbose
-    )
+    clear_hidden(args.directory, recursive=args.recursive, verbose=args.verbose)
 
 
 def cli():

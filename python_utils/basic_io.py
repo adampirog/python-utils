@@ -1,6 +1,7 @@
 import dataclasses
 import json
 from datetime import date, datetime, timedelta
+from typing import Any
 
 import numpy as np
 
@@ -17,7 +18,7 @@ class ExtendedJsonEncoder(json.JSONEncoder):
             return float(o)
         if isinstance(o, np.integer):
             return int(o)
-        if isinstance(o, np.string_):
+        if isinstance(o, np.str_):
             return str(o)
         if isinstance(o, (datetime, date)):
             return o.isoformat()
@@ -26,21 +27,20 @@ class ExtendedJsonEncoder(json.JSONEncoder):
         return super().default(o)
 
 
-def save_json(data: dict, path: str) -> None:
-    with open(path, "wt", encoding="utf-8") as handle:
+def save_json(data: Any, path: str) -> None:
+    with open(path, "w", encoding="utf-8") as handle:
         json.dump(data, handle, indent=2, cls=ExtendedJsonEncoder)
 
 
-def load_json(path: str) -> dict:
+def load_json(path: str) -> Any:
     with open(path, encoding="utf-8") as handle:
         result = json.load(handle)
     return result
 
 
 def save_txt(data: list, path: str) -> None:
-    with open(path, "wt", encoding="utf-8") as handle:
-        for line in data:
-            handle.write(f"{line}\n")
+    with open(path, "w", encoding="utf-8") as handle:
+        handle.writelines(f"{line}\n" for line in data)
 
 
 def load_txt(path: str) -> list:

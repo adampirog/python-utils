@@ -29,7 +29,7 @@ def test_txt(tmpdir, text):
 
 def test_json(tmpdir, text):
     values = [150] * 10
-    data = dict(zip(text, values))
+    data = dict(zip(text, values, strict=True))
     file = tmpdir.mkdir("test").join("file.json")
 
     save_json(data, file)
